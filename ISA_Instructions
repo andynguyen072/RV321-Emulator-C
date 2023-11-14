@@ -3,8 +3,3 @@
 void ADDI(int Register1Location, int Register2Location, int Immediate){
     Registers[Register1Location] = Registers[Register2Location] + Immediate;
 }
-
-int printStr(char str[]){
-    printf(str);
-    return 0;
-}
