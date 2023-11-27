@@ -2,7 +2,7 @@
 For SJSU CMPE120 Group Project Fall 2023
 
 
-##Contributors:
+## Contributors:
 
 andynguyen072
 
