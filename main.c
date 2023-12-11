@@ -54,12 +54,14 @@ int main(){
     printf("    'inst'          prints the \"assembly of the instruction\" that will be executed next.\n");
     printf("    'b[pc]'         will put a breakpoint at a particular/ specied [pc]. So, if 'r' is given as the next command, the code will run till [pc] (or the end, if [pc] is not hit) and then break there, allowing any of these commands after the break. The simulator must allow storing up to 5 breakpoints at a time.\n");
     printf("    'c'             continues the execution, till it hits the next breakpoint pc or exits.\n");
+    printf("    'exit'          exits the terminal.\n");
 
     char UserInputCommand[10];
-    char currentLine[] = "";
+    char currentLine[8] = "";
     bool ProgramFinished = false;
+    bool TerminalRun = true;
 
-    while (1 == 1){
+    while (TerminalRun == true){
         printf("Enter a command: ");
         scanf("%s", UserInputCommand);
  
@@ -106,7 +108,7 @@ int main(){
                 sprintf(RegisterValueString, "%d", Registers[index]);
                 strcpy(str, registerString);
                 strcat(str, RegisterValueString);
-                printf(str);
+                printf("%s", str);
                 newLine();
             }
         } else if ((strcmp(UserInputCommand, "pc")) == 0) {
@@ -115,7 +117,7 @@ int main(){
             sprintf(PCString, "%d", ProgramCounter);
             strcpy(str, "PC: 0x");
             strcat(str, PCString);
-            printf(str);
+            printf("%s",str);
             newLine();
         } else if ((strcmp(UserInputCommand, "c")) == 0) {
             if (ProgramFinished == true) {
@@ -130,6 +132,8 @@ int main(){
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
+        } else if ((strcmp(UserInputCommand, "exit")) == 0) {
+            TerminalRun = false;
         }
     }
 }
