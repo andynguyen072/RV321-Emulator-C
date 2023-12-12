@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h> 
 #include "ISA_Instructions"
-#include "Instructions_Load.h"
 #include "Global_Variables.h"
 #include "string.h"
 

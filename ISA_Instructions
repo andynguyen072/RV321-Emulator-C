@@ -3,30 +3,163 @@
 /*
     Misc Instructions
 */
+void LUI(int rd, int imm){ // Load Upper Immediate
+    
+}
+
+void AUIPC(int rd, int imm){ // Add Upper Immediate to PC
+    
+}
+
+void JAL(int rd, int offset){ // Jump and Link
+    
+}
+
+void JAL(int rd, int rs1, int offset){ // Jump and Link Register
+    
+}
 
 /*
     Branch Instructions
 */
+void BEQ(int rs1, int rs2, int offset){ // Branch if Equal
+    
+}
 
+void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
+    
+}
+
+void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
+    
+}
+
+void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
+    
+}
+
+void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
+    
+}
+
+void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
+    
+}
 
 /*
     Load Instructions
 */
+void LB(int rd, int offset, int rs1){ // Load Byte
+    
+}
 
+void LH(int rd, int offset, int rs1){ // Load Halfword
+    
+}
 
+void LW(int rd, int offset, int rs1){ // Load Word
+    
+}
+
+void LBU(int rd, int offset, int rs1){ // Load Byte Unsigned
+    
+}
+
+void LHU(int rd, int offset, int rs1){ // Load Halfword Unsigned
+    
+}
 /*
     Store Instructions
 */
+void SB(int rs2, int offset, int rs1){ // Store Byte
 
+}
+
+void SH(int rs2, int offset, int rs1){ // Store Halfword
+    
+}
+
+void SW(int rs2, int offset, int rs1){ // Store Word
+    
+}
 
 /*
     Immediate Instructions
 */
-void ADDI(int Register1Location, int Register2Location, int Immediate){
-    Registers[Register1Location] = Registers[Register2Location] + Immediate;
+void ADDI(int rd, int rs1, int imm){ // Add Immediate
+    Registers[rd] = Registers[rs1] + imm;
+}
+
+void SLTI(int rd, int rs1, int imm){ // Set Less Than Immediate
+
+}
+
+void SLTIU(int rd, int rs1, int imm){ // Set less than Immediate Unsigned
+
+}
+
+void XORI(int rd, int rs1, int imm){ // XOR Immediate
+
+}
+
+void ORI(int rd, int rs1, int imm){ // OR Immediate
+    
+}
+
+void ANDI(int rd, int rs1, int imm){ // AND Immediate
+    
 }
 
 /*
     Register Instructions
 */
+void SLLI(int rd, int rs1, int shamt){ // Shift Left Logical Immediate
+    
+}
 
+void SRLI(int rd, int rs1, int shamt){ // Shift Right Logical Immediate
+    
+}
+
+void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
+    
+}
+
+void ADD(int rd, int rs1, int rs2){ // Add
+    
+}
+
+void SUB(int rd, int rs1, int rs2){ // Subtract
+    
+}
+
+void SLL(int rd, int rs1, int rs2){ // Shift Left Logical
+    
+}
+
+void SLT(int rd, int rs1, int rs2){ // Set Less Than
+    
+}
+
+void SLTU(int rd, int rs1, int rs2){ // Set Less Than Unsigned
+    
+}
+
+void XOR(int rd, int rs1, int rs2){ // XOR
+    
+}
+
+void SRL(int rd, int rs1, int rs2){ // Shift Right Logical
+    
+}
+
+void SRA(int rd, int rs1, int rs2){ // Shift Right Arithmetic
+}
+
+void OR(int rd, int rs1, int rs2){ // OR
+    
+}
+
+void AND(int rd, int rs1, int rs2){ // AND
+    
+}
