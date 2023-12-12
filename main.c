@@ -58,8 +58,190 @@ int main(){
     /*
         File Loading / Parsing
     */
-    int n = LoadInstructions(FileName);
+    void (*instr_func_array[])() = {};
+    char currentLine[8] = "";
 
+    while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
+        //  GET FULL LINE
+        char fullLine[32] = "";
+
+        for(int i = 0; i < 8; i++){fullLine[24+i] = currentLine[i];}
+        
+        fgets(currentLine, 50, datFileRead);
+        for(int i = 0; i < 8; i++){fullLine[16+i] = currentLine[i];}
+        
+        fgets(currentLine, 50, datFileRead);
+        for(int i = 0; i < 8; i++){fullLine[8+i] = currentLine[i];}
+        
+        fgets(currentLine, 50, datFileRead);
+        for(int i = 0; i < 8; i++){fullLine[i] = currentLine[i];}
+
+        // SELECT OPCODE
+
+        char opcode[8] = "";
+        for(int i = 0; i < 7; i++){opcode[i] = fullLine[25+i];}
+        opcode[7] = '\0';
+
+        // SELECT RD / IMMEDIATE
+        char rd[6] = "";
+        for(int i = 0; i < 5; i++){rd[i] = fullLine[20+i];}
+        rd[5] = '\0';
+
+        // SELECT POSSIBLE FUNC CODE
+
+        char func[4] = "";
+        for(int i = 0; i < 3; i++){func[i] = fullLine[17+i];}
+        func[3] = '\0';
+
+        /*
+            INSTRUCTION SEARCH - This can be made much more efficient if time permits
+        */
+        if(strcmp(opcode, "0110111") == 0)
+        {
+            // LUI
+            
+        } else if(strcmp(opcode, "0010111") == 0)
+        {
+            // AUIPC
+
+        } else if(strcmp(opcode, "1101111") == 0)
+        {
+            // JAL
+
+        } else if(strcmp(opcode, "1100111") == 0)
+        {
+            // JALR
+
+        } else if(strcmp(opcode, "1100011") == 0)
+        {
+            // Branch Functions
+            if(strcmp(func, "000") == 0)
+            {
+                //BEQ
+            } else if(strcmp(func, "001") == 0)
+            {
+                //BNE
+            } else if(strcmp(func, "100") == 0)
+            {
+                //BLT
+            } else if(strcmp(func, "101") == 0)
+            {
+                //BGE
+            } else if(strcmp(func, "110") == 0)
+            {
+                //BLTU
+            } else if(strcmp(func, "111") == 0)
+            {
+                //BGEU
+            } 
+        } else if(strcmp(opcode, "0000011") == 0)
+        {
+            // Load Functions
+            if(strcmp(func, "000") == 0)
+            {
+                //LB
+            } else if(strcmp(func, "001") == 0)
+            {
+                //LH
+            } else if(strcmp(func, "010") == 0)
+            {
+                //LW
+            } else if(strcmp(func, "100") == 0)
+            {
+                //LBU
+            } else if(strcmp(func, "101") == 0)
+            {
+                //LHU
+            }
+        } else if(strcmp(opcode, "0100011") == 0)
+        {
+            // Store Functions
+            if(strcmp(func, "000") == 0)
+            {
+                //SB
+            } else if(strcmp(func, "001") == 0)
+            {
+                //SH
+            } else if(strcmp(func, "010") == 0)
+            {
+                //SW
+            }
+        } else if(strcmp(opcode, "0010011") == 0)
+        {
+            // Immediate Instructions
+            if(strcmp(func, "000") == 0)
+            {
+                //ADDI
+            } else if(strcmp(func, "010") == 0)
+            {
+                //SLTI
+            } else if(strcmp(func, "011") == 0)
+            {
+                //SLTIU
+            } else if(strcmp(func, "100") == 0)
+            {
+                //XORI
+            } else if(strcmp(func, "110") == 0)
+            {
+                //ORI
+            } else if(strcmp(func, "111") == 0)
+            {
+                //ANDI
+            } else if(strcmp(func, "001") == 0)
+            {
+                //SLLI
+            } else if(strcmp(func, "101") == 0)
+            {
+                if(fullLine[1] == '0')
+                {
+                    //SRLI
+                } else
+                {
+                    //SRAI
+                }
+            } 
+        } else if(strcmp(opcode, "0110011") == 0)
+        {
+            // Register Instructions
+            if(strcmp(func, "000") == 0)
+            {
+                if(fullLine[1] == '0')
+                {
+                    //ADD
+                } else
+                {
+                    //SUB
+                }
+            } else if(strcmp(func, "001") == 0)
+            {
+                // SSL
+            } else if(strcmp(func, "010") == 0)
+            {
+                // SLT
+            } else if(strcmp(func, "011") == 0)
+            {
+                // SLTU
+            } else if(strcmp(func, "100") == 0)
+            {
+                // XOR
+            } else if(strcmp(func, "101") == 0)
+            {
+                if(fullLine[1] == '0')
+                {
+                    //SRL
+                } else
+                {
+                    //SRA
+                }
+            } else if(strcmp(func, "110") == 0)
+            {
+                // OR
+            } else if(strcmp(func, "111") == 0)
+            {
+                // AND
+            } 
+        } 
+    }
 
     /*
         Command Prompt
@@ -76,7 +258,7 @@ int main(){
     printf("    'exit'          exits the terminal.\n");
 
     char UserInputCommand[10];
-    char currentLine[8] = "";
+    bool ProgramStarted = false;
     bool ProgramFinished = false;
     bool TerminalRun = true;
 
@@ -95,9 +277,10 @@ int main(){
         if ((strcmp(UserInputCommand, "r")) == 0) {
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
-            } else if (strlen(currentLine) != 0) {
+            } else if (ProgramStarted == true) {
                 printf("Program is in the middle of execution, please restart terminal to run this command.\n");
             } else {
+                ProgramStarted = true;
                 while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
                     printf("%s", currentLine);
                 }
@@ -167,9 +350,10 @@ int main(){
         } else if ((strcmp(UserInputCommand, "c")) == 0) {
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
-            } else if (strlen(currentLine) == 0) {
+            } else if (ProgramStarted == true) {
                 printf("Program has not started yet. Use 'r' or 's' to begin program.\n");
             } else {
+                ProgramStarted = true;
                 while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
                     printf("%s", currentLine);
                 }
