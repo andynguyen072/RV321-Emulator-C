@@ -2,9 +2,13 @@
 #include <stdbool.h>
 #include <stdlib.h> 
 #include "ISA_Instructions"
+#include "Instructions_Load.h"
 #include "Global_Variables.h"
 #include "string.h"
 
+/*
+    Misc Functions
+*/
 void newLine(){
     printf("\n");
 }
@@ -16,8 +20,13 @@ int compareChar(char a, char b) {
         return -1;
 }
 
+/*
+    Main
+*/
 int main(){
-    // Workspace testing area
+    /*
+        Workspace Testing
+    */
     ADDI(5, 3, 2);
     ADDI(1, 5, 5);
     printf("%d ", Registers[5]);
@@ -26,28 +35,38 @@ int main(){
     char myString[] = "joe";
     printf("%c", myString[2]);
 
-    // Actual code below
+    /*
+        Reading File + Initializing
+    */
     printf("\n");
-
     ProgramCounter = 1000;
 
-    // Open file in reading mode
+        // Open file in reading mode
     FILE* datFileRead;
     char FileName[100] = "Test_Files/line.dat";
 
     datFileRead = fopen(FileName, "r");
-    // fgetc    return each character in a sequence
-    // fgets    return each string in a sequence
-    // EOF      end of file
+        // fgetc    return each character in a sequence
+        // fgets    return each string in a sequence
+        // EOF      end of file
 
     if (datFileRead == NULL) { // If file cannot be read, print error
         printf("Error opening file.\n");
         return 0;
     }
 
+    /*
+        File Loading / Parsing
+    */
+    int n = LoadInstructions(FileName);
+
+
+    /*
+        Command Prompt
+    */
     printf("Current command:\n");
     printf("    'r'             runs the entire program in one go till it hits a breakpoint or exits.\n");
-    printf("    's'             runs the next instruction and then stops and waits for next command\n");
+    printf("    's'             runs the next instruction and then stops and waits for next command.\n");
     printf("    'x0' to 'x31'   return the contents of the register from the register file (x0 must always stay 0).\n");
     printf("    '0x12345678'    returns the contents from the address 0x12345678 in the data memory.\n");
     printf("    'pc'            returns the value of the PC.\n");
@@ -61,11 +80,18 @@ int main(){
     bool ProgramFinished = false;
     bool TerminalRun = true;
 
+    /*
+        Terminal Backend
+    */
+
     while (TerminalRun == true){
         printf("Enter a command: ");
         scanf("%s", UserInputCommand);
  
-        // strcmp returns -1 if not equal, 0 if equal
+        /*
+            r - runs the entire program in one go till it hits a breakpoint or exits
+        */
+            // strcmp returns -1 if not equal, 0 if equal
         if ((strcmp(UserInputCommand, "r")) == 0) {
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
@@ -79,6 +105,10 @@ int main(){
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
+        /*
+           s - runs the next instruction and then stops and waits for next command
+        */
+        
         } else if ((strcmp(UserInputCommand, "s")) == 0) {
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
@@ -89,6 +119,11 @@ int main(){
                 fclose(datFileRead);
                 printf("No more lines to read please restart terminal to run this command.\n");
             }
+        
+        /*
+            'x0' to 'x31' - return the contents of the register from the register file (x0 must always stay 0).
+        */
+
         } else if (compareChar(UserInputCommand[0], 'x') == 0) { // Register Command
             if (strlen(UserInputCommand) > 1) {
                 char indexString[10];
@@ -111,6 +146,11 @@ int main(){
                 printf("%s", str);
                 newLine();
             }
+        
+        /*
+            pc - returns the value of the PC.
+        */
+
         } else if ((strcmp(UserInputCommand, "pc")) == 0) {
             char str[100];
             char PCString[100];
@@ -119,6 +159,11 @@ int main(){
             strcat(str, PCString);
             printf("%s",str);
             newLine();
+        
+        /*
+            c - continues the execution, till it hits the next breakpoint pc or exits.
+        */
+        
         } else if ((strcmp(UserInputCommand, "c")) == 0) {
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
@@ -132,6 +177,11 @@ int main(){
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
+        
+        /*
+            exit - exits the terminal.
+        */
+
         } else if ((strcmp(UserInputCommand, "exit")) == 0) {
             TerminalRun = false;
         }
