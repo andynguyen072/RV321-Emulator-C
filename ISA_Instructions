@@ -15,7 +15,7 @@ void JAL(int rd, int offset){ // Jump and Link
     
 }
 
-void JAL(int rd, int rs1, int offset){ // Jump and Link Register
+void JALR(int rd, int rs1, int offset){ // Jump and Link Register
     
 }
 
