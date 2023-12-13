@@ -1,3 +1,2 @@
-char UserInputCommand[10];
-    // char currentLine[] = "";
-    // bool ProgramFinished = false;
+SB(5, 0, 2);
+    // printf("%d ", Registers[5]);

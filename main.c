@@ -4,6 +4,7 @@
 #include "ISA_Instructions"
 #include "Global_Variables.h"
 #include "string.h"
+#include <stdint.h>
 
 /*
     Misc Functions
@@ -32,8 +33,41 @@ int main(){
     printf("%d ", Registers[1]);
     printf("%d ", Registers[4]);
     char myString[] = "joe";
-    printf("%c", myString[2]);
+    printf("%c\n", myString[2]);
 
+    // char Memory[1024] = {0};
+    // Memory[-2] = 10;
+    // printf("Memory at address 2: 0x%03X\n", Memory[-2]);
+
+    //Simulated memory (replace this with your actual memory representation)
+    int8_t Memory[10000] = {};
+
+    // Number to store in memory
+    int32_t numberToStore = 0x12345678;
+
+    // Memory address where you want to store the number
+    int32_t addressToStore = 0x100;  // Replace with the desired memory address
+
+    // Use a pointer to store the number in memory
+    *(int32_t*)&Registers[addressToStore] = numberToStore;
+
+    Registers[0x10000] = 0x1;
+
+    // Print the memory content to verify
+    printf("Memory at address 0x%X: 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X\n",
+           addressToStore,
+           Registers[addressToStore],
+           Registers[addressToStore + 1],
+           Registers[addressToStore + 2],
+           Registers[addressToStore + 3],
+           Registers[0x9999]
+    );
+
+    return 0;
+
+    // SB(5, 0, 2);
+    // printf("%d ", Registers[5]);
+    
     /*
         Reading File + Initializing
     */

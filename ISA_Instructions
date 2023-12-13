@@ -1,10 +1,11 @@
 #include "Global_Variables.h"
+#include <stdint.h>
 
 /*
     Misc Instructions
 */
 void LUI(int rd, int imm){ // Load Upper Immediate
-    
+    Registers[rd] = imm << 12;
 }
 
 void AUIPC(int rd, int imm){ // Add Upper Immediate to PC
@@ -49,38 +50,43 @@ void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
 /*
     Load Instructions
 */
+
 void LB(int rd, int offset, int rs1){ // Load Byte
-    
+    //Registers[rd] = rs1[offset];
 }
 
-void LH(int rd, int offset, int rs1){ // Load Halfword
-    
+void LH(int rd, int offset, int rs1[]){ // Load Halfword
+    Registers[rd] = rs1[offset];
 }
 
-void LW(int rd, int offset, int rs1){ // Load Word
-    
+void LW(int rd, int offset, int rs1[]){ // Load Word
+    Registers[rd] = rs1[offset];
 }
 
-void LBU(int rd, int offset, int rs1){ // Load Byte Unsigned
-    
+void LBU(int rd, int offset, int rs1[]){ // Load Byte Unsigned
+    Registers[rd] = rs1[offset];
 }
 
-void LHU(int rd, int offset, int rs1){ // Load Halfword Unsigned
-    
+void LHU(int rd, int offset, int rs1[]){ // Load Halfword Unsigned
+    Registers[rd] = rs1[offset];
 }
 /*
     Store Instructions
 */
-void SB(int rs2, int offset, int rs1){ // Store Byte
+void SB(int rs2, int offset, int rs1[]){ // Store Byte
+    uint8_t byteToStore = rs2 & 0xFF;
 
+    // Use pointer arithmetic to calculate the address and store the byte
+    uint8_t *byteAddress = (uint8_t*)rs1 + offset;
+    *byteAddress = byteToStore;
 }
 
-void SH(int rs2, int offset, int rs1){ // Store Halfword
-    
+void SH(int rs2, int offset, int rs1[]){ // Store Halfword
+    rs1[offset] = rs2;
 }
 
-void SW(int rs2, int offset, int rs1){ // Store Word
-    
+void SW(int rs2, int offset, int rs1[]){ // Store Word
+    rs1[offset] = rs2;
 }
 
 /*
@@ -91,35 +97,35 @@ void ADDI(int rd, int rs1, int imm){ // Add Immediate
 }
 
 void SLTI(int rd, int rs1, int imm){ // Set Less Than Immediate
-
+    Registers[rd] = (Registers[rs1] < imm) ? 1 : 0;
 }
 
 void SLTIU(int rd, int rs1, int imm){ // Set less than Immediate Unsigned
-
+    Registers[rd] = ((unsigned)Registers[rs1] < (unsigned)imm) ? 1 : 0;
 }
 
 void XORI(int rd, int rs1, int imm){ // XOR Immediate
-
+    Registers[rd] = Registers[rs1] ^ imm;
 }
 
 void ORI(int rd, int rs1, int imm){ // OR Immediate
-    
+    Registers[rd] = Registers[rs1] | imm;
 }
 
 void ANDI(int rd, int rs1, int imm){ // AND Immediate
-    
+    Registers[rd] = Registers[rs1] & imm;
 }
 
 void SLLI(int rd, int rs1, int shamt){ // Shift Left Logical Immediate
-    
+    Registers[rd] = (unsigned)Registers[rs1] << shamt;
 }
 
 void SRLI(int rd, int rs1, int shamt){ // Shift Right Logical Immediate
-    
+    Registers[rd] = (unsigned)Registers[rs1] >> shamt;
 }
 
 void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
-    
+    Registers[rd] = Registers[rs1] >> shamt;
 }
 
 /*
