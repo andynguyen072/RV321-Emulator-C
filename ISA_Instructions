@@ -91,23 +91,23 @@ void ADDI(int rd, int rs1, int imm){ // Add Immediate
 }
 
 void SLTI(int rd, int rs1, int imm){ // Set Less Than Immediate
-
+    Registers[rd] = (Registers[rs1] < imm) ? 1 : 0;
 }
 
 void SLTIU(int rd, int rs1, int imm){ // Set less than Immediate Unsigned
-
+    Registers[rd] = ((unsigned int)Registers[rs1] < (unsigned int)imm)? 1 : 0;
 }
 
 void XORI(int rd, int rs1, int imm){ // XOR Immediate
-
+    Registers[rd] = Registers[rs1] ^ imm;    
 }
 
 void ORI(int rd, int rs1, int imm){ // OR Immediate
-    
+    Registers[rd] = Registers[rs1] | imm;
 }
 
 void ANDI(int rd, int rs1, int imm){ // AND Immediate
-    
+    Registers[rd] = Registers[rs1] & imm;
 }
 
 void SLLI(int rd, int rs1, int shamt){ // Shift Left Logical Immediate
