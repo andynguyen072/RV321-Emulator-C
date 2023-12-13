@@ -11,9 +11,6 @@
     Misc Functions
 */
 clock_t start, end;
-char *asmPrint[100] = {};
-char **asmPtr = asmPrint;
-int asmPC = 0;
 
 void startTimer() {
     start = clock();
@@ -129,7 +126,7 @@ int main(){
 
         // Open file in reading mode
     FILE* datFileRead;
-    char FileName[100] = "Test_Files/line.dat";
+    char FileName[100] = "Test_Files/r_type.dat";
 
     datFileRead = fopen(FileName, "r");
         // fgetc    return each character in a sequence
@@ -151,9 +148,11 @@ int main(){
     /*
         File Loading / Parsing
     */
-    void (*instr_func_array[100])() = {};
-    int function_array_pointer = 0;
+    //void (*instr_func_array[100])() = {};
+    //int function_array_pointer = 0;
     char currentLine[8] = "";
+    int asmPC = 0;
+    char asmPrint[50][50];
 
     while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
         //  GET FULL LINE
@@ -202,11 +201,11 @@ int main(){
             char ImmChar[20] = "";
             sprintf(ImmChar, "%d", imm);
             char RDChar[20] = "";
-            sprintf(RDChar, "%d", ird);
+            sprintf(RDChar, "t%d", ird);
             strncat(statement, RDChar, 20);
             strncat(statement, ", ", 3);
             strncat(statement, ImmChar, 20);
-            asmPtr[asmPC] = statement;
+            strcpy(asmPrint[asmPC], statement);
             asmPC += 1;
             LUI(ird,imm);
             
@@ -222,11 +221,11 @@ int main(){
             char ImmChar[20] = "";
             sprintf(ImmChar, "%d", imm);
             char RDChar[20] = "";
-            sprintf(RDChar, "%d", ird);
+            sprintf(RDChar, "t%d", ird);
             strncat(statement, RDChar, 20);
             strncat(statement, ", ", 3);
             strncat(statement, ImmChar, 20);
-            asmPtr[asmPC] = statement;
+            strcpy(asmPrint[asmPC], statement);
             asmPC += 1;
             AUIPC(ird,imm);
 
@@ -245,11 +244,11 @@ int main(){
             char ImmChar[20] = "";
             sprintf(ImmChar, "%d", imm);
             char RDChar[20] = "";
-            sprintf(RDChar, "%d", ird);
+            sprintf(RDChar, "t%d", ird);
             strncat(statement, RDChar, 20);
             strncat(statement, ", ", 3);
             strncat(statement, ImmChar, 20);
-            asmPtr[asmPC] = statement;
+            strcpy(asmPrint[asmPC], statement);
             asmPC += 1;
             JAL(ird,imm);
 
@@ -258,8 +257,8 @@ int main(){
             // JALR
             char rs1C[6] = "";
             for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-            char immC[12] = "";
-            for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+            char immC[13] = "";
+            for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
             int imm = twosBinaryConv(immC);
             int rs1 = standBinaryCov(rs1C);
             int ird = standBinaryCov(rd);
@@ -268,15 +267,15 @@ int main(){
             char ImmChar[20] = "";
             sprintf(ImmChar, "%d", imm);
             char RDChar[20] = "";
-            sprintf(RDChar, "%d", ird);
+            sprintf(RDChar, "t%d", ird);
             char RSChar[20] = "";
-            sprintf(RSChar, "%d", rs1);
+            sprintf(RSChar, "t%d", rs1);
             strncat(statement, RDChar, 20);
             strncat(statement, ", ", 3);
             strncat(statement, RSChar, 20);
             strncat(statement, ", ", 3);
             strncat(statement, ImmChar, 20);
-            asmPtr[asmPC] = statement;
+            strcpy(asmPrint[asmPC], statement);
             asmPC += 1;
             JALR(ird,rs1,imm);
 
@@ -304,15 +303,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BEQ(rs1,rs2,imm);
             } else if(strcmp(func, "001") == 0)
@@ -336,15 +335,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BNE(rs1,rs2,imm);
             } else if(strcmp(func, "100") == 0)
@@ -368,15 +367,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BLT(rs1,rs2,imm);
             } else if(strcmp(func, "101") == 0)
@@ -400,15 +399,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BGE(rs1,rs2,imm);
             } else if(strcmp(func, "110") == 0)
@@ -432,15 +431,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BLTU(rs1,rs2,imm);
             } else if(strcmp(func, "111") == 0)
@@ -463,15 +462,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 BGEU(rs1,rs2,imm);
             } 
@@ -483,8 +482,8 @@ int main(){
                 //LB
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -493,16 +492,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 LB(ird,imm,rs1);
 
@@ -511,8 +510,8 @@ int main(){
                 //LH
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -521,16 +520,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 LH(ird,imm,rs1);
             } else if(strcmp(func, "010") == 0)
@@ -538,8 +537,8 @@ int main(){
                 //LW
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -548,16 +547,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 LW(ird,imm,rs1);
             } else if(strcmp(func, "100") == 0)
@@ -565,8 +564,8 @@ int main(){
                 //LBU
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -575,16 +574,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 LBU(ird,imm,rs1);
             } else if(strcmp(func, "101") == 0)
@@ -592,8 +591,8 @@ int main(){
                 //LHU
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -602,16 +601,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 LHU(ird,imm,rs1);
             }
@@ -636,16 +635,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SB(rs2,imm,rs1);
             } else if(strcmp(func, "001") == 0)
@@ -666,16 +665,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SH(rs2,imm,rs1);
             } else if(strcmp(func, "010") == 0)
@@ -696,16 +695,16 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RS2Char, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
                 strncat(statement, "(", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ")", 3);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SW(rs2,imm,rs1);
             }
@@ -717,8 +716,8 @@ int main(){
                 //ADDI
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -727,15 +726,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 ADDI(ird,rs1,imm);
             } else if(strcmp(func, "010") == 0)
@@ -743,8 +742,8 @@ int main(){
                 //SLTI
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -753,15 +752,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLTI(ird,rs1,imm);
             } else if(strcmp(func, "011") == 0)
@@ -769,8 +768,8 @@ int main(){
                 //SLTIU
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -779,15 +778,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLTIU(ird,rs1,imm);
             } else if(strcmp(func, "100") == 0)
@@ -795,8 +794,8 @@ int main(){
                 //XORI
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -805,15 +804,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 XORI(ird,rs1,imm);
             } else if(strcmp(func, "110") == 0)
@@ -821,8 +820,8 @@ int main(){
                 //ORI
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -831,15 +830,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 ORI(ird,rs1,imm);
             } else if(strcmp(func, "111") == 0)
@@ -847,8 +846,8 @@ int main(){
                 //ANDI
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
-                char immC[12] = "";
-                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                char immC[13] = "";
+                for(int i = 0; i < 12; i++){immC[i] = fullLine[i];}
                 int imm = twosBinaryConv(immC);
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
@@ -857,15 +856,15 @@ int main(){
                 char ImmChar[20] = "";
                 sprintf(ImmChar, "%d", imm);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ImmChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 ANDI(ird,rs1,imm);
             } else if(strcmp(func, "001") == 0)
@@ -883,15 +882,15 @@ int main(){
                 char ShmantChar[20] = "";
                 sprintf(ShmantChar, "%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, ShmantChar, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLLI(ird,rs1,rs2);
             } else if(strcmp(func, "101") == 0)
@@ -911,15 +910,15 @@ int main(){
                     char ShmantChar[20] = "";
                     sprintf(ShmantChar, "%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, ShmantChar, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     SRLI(ird,rs1,rs2);
                 } else
@@ -937,15 +936,15 @@ int main(){
                     char ShmantChar[20] = "";
                     sprintf(ShmantChar, "%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, ShmantChar, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     SRAI(ird,rs1,rs2);
                 }
@@ -968,17 +967,17 @@ int main(){
 
                     char statement[100] = "add ";
                     char RS2Char[20] = "";
-                    sprintf(RS2Char, "%d", rs2);
+                    sprintf(RS2Char, "t%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RS2Char, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     ADD(ird,rs1,rs2);
                 } else
@@ -994,17 +993,17 @@ int main(){
 
                     char statement[100] = "sub ";
                     char RS2Char[20] = "";
-                    sprintf(RS2Char, "%d", rs2);
+                    sprintf(RS2Char, "t%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RS2Char, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     SUB(ird,rs1,rs2);
                 }
@@ -1021,17 +1020,17 @@ int main(){
 
                 char statement[100] = "ssl ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLL(ird,rs1,rs2);
             } else if(strcmp(func, "010") == 0)
@@ -1047,17 +1046,17 @@ int main(){
 
                 char statement[100] = "slt ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLT(ird,rs1,rs2);
             } else if(strcmp(func, "011") == 0)
@@ -1073,17 +1072,17 @@ int main(){
 
                 char statement[100] = "sltu ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 SLTU(ird,rs1,rs2);
             } else if(strcmp(func, "100") == 0)
@@ -1099,17 +1098,17 @@ int main(){
 
                 char statement[100] = "xor ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 XOR(ird,rs1,rs2);
             } else if(strcmp(func, "101") == 0)
@@ -1127,17 +1126,17 @@ int main(){
 
                     char statement[100] = "srl ";
                     char RS2Char[20] = "";
-                    sprintf(RS2Char, "%d", rs2);
+                    sprintf(RS2Char, "t%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RS2Char, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     SRL(ird,rs1,rs2);
                 } else
@@ -1153,17 +1152,17 @@ int main(){
 
                     char statement[100] = "sra ";
                     char RS2Char[20] = "";
-                    sprintf(RS2Char, "%d", rs2);
+                    sprintf(RS2Char, "t%d", rs2);
                     char RDChar[20] = "";
-                    sprintf(RDChar, "%d", ird);
+                    sprintf(RDChar, "t%d", ird);
                     char RSChar[20] = "";
-                    sprintf(RSChar, "%d", rs1);
+                    sprintf(RSChar, "t%d", rs1);
                     strncat(statement, RDChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RSChar, 20);
                     strncat(statement, ", ", 3);
                     strncat(statement, RS2Char, 20);
-                    asmPtr[asmPC] = statement;
+                    strcpy(asmPrint[asmPC], statement);
                     asmPC += 1;
                     SRA(ird,rs1,rs2);
                 }
@@ -1180,17 +1179,17 @@ int main(){
 
                 char statement[100] = "or ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 OR(ird,rs1,rs2);
             } else if(strcmp(func, "111") == 0)
@@ -1206,17 +1205,17 @@ int main(){
 
                 char statement[100] = "and ";
                 char RS2Char[20] = "";
-                sprintf(RS2Char, "%d", rs2);
+                sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
-                sprintf(RDChar, "%d", ird);
+                sprintf(RDChar, "t%d", ird);
                 char RSChar[20] = "";
-                sprintf(RSChar, "%d", rs1);
+                sprintf(RSChar, "t%d", rs1);
                 strncat(statement, RDChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RSChar, 20);
                 strncat(statement, ", ", 3);
                 strncat(statement, RS2Char, 20);
-                asmPtr[asmPC] = statement;
+                strcpy(asmPrint[asmPC], statement);
                 asmPC += 1;
                 AND(ird,rs1,rs2);
             } 
@@ -1245,12 +1244,17 @@ int main(){
     bool ProgramStarted = false;
     bool ProgramFinished = false;
     bool TerminalRun = true;
-    for(int i = 0; i < 100; i++)
+
+    char nextLine[50] = ".text\n";
+    fwrite(nextLine,strlen(nextLine),1,asmFileWrite);
+    for(int i = 0; i < 50; i++)
     {
-        if(asmPrint[i] != NULL)
+        if(asmPrint[i][0] != '\0')
         {
-            printf("%s\n", asmPrint[i]);
-        }
+            strcpy(nextLine,asmPrint[i]);
+            strcat(nextLine,"\n");
+            fwrite(nextLine,strlen(nextLine),1,asmFileWrite);
+        } else {i = 50;}
     }
 
     /*
