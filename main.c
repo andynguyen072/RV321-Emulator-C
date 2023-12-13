@@ -102,6 +102,14 @@ int twosBinaryConv(char bin[])
     }
 }
 
+void printRegisters()
+{
+    for(int i=0; i < 32; i++)
+    {
+        printf("x%d: %d\n", i, Registers[i]);
+    }
+}
+
 /*
     Main
 */
@@ -109,14 +117,14 @@ int main(){
     /*
         Workspace Testing
     */
-    ADDI(5, 3, 2);
-    ADDI(1, 5, 5);
-    printf("%d ", Registers[5]);
-    printf("%d ", Registers[1]);
-    printf("%d ", Registers[4]);
-    char myString[] = "joe";
-    printf("%c ", myString[2]);
-    printf("%d ", twosBinaryConv("10010001001010110111"));
+    // ADDI(5, 3, 2);
+    // ADDI(1, 5, 5);
+    // printf("%d ", Registers[5]);
+    // printf("%d ", Registers[1]);
+    // printf("%d ", Registers[4]);
+    // char myString[] = "joe";
+    // printf("%c ", myString[2]);
+    // printf("%d ", twosBinaryConv("10010001001010110111"));
 
     /*
         Reading File + Initializing
@@ -153,6 +161,8 @@ int main(){
     char currentLine[8] = "";
     int asmPC = 0;
     char asmPrint[50][50];
+
+    startTimer();
 
     while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
         //  GET FULL LINE
@@ -1009,7 +1019,7 @@ int main(){
                 }
             } else if(strcmp(func, "001") == 0)
             {
-                // SSL
+                // SLL
                 char rs1C[6] = "";
                 for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
                 char rs2C[6] = "";
@@ -1018,7 +1028,7 @@ int main(){
                 int rs1 = standBinaryCov(rs1C);
                 int ird = standBinaryCov(rd);
 
-                char statement[100] = "ssl ";
+                char statement[100] = "sll ";
                 char RS2Char[20] = "";
                 sprintf(RS2Char, "t%d", rs2);
                 char RDChar[20] = "";
@@ -1222,7 +1232,7 @@ int main(){
         } 
     }
 
-
+    stopTimer();
 
 
 
@@ -1270,9 +1280,8 @@ int main(){
         */
             // strcmp returns -1 if not equal, 0 if equal
         if ((strcmp(UserInputCommand, "r")) == 0) {
-            startTimer();
             if (ProgramFinished == true) {
-                printf("Program has already been ran, please restart terminal to run this command.\n");
+                printf("Program has already been ran, please restart terminalr to run this command.\n");
             } else if (ProgramStarted == true) {
                 printf("Program is in the middle of execution, please restart terminal to run this command.\n");
             } else {
@@ -1280,6 +1289,8 @@ int main(){
                 while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
                     printf("%s", currentLine);
                 }
+
+                printRegisters();
                 ProgramFinished = true; 
                 fclose(datFileRead);
                 fclose(asmFileWrite);
@@ -1290,7 +1301,7 @@ int main(){
         */
         
         } else if ((strcmp(UserInputCommand, "s")) == 0) {
-            startTimer();
+            
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
             } else if ((fgets(currentLine, 50, datFileRead)) != NULL) {
@@ -1348,7 +1359,6 @@ int main(){
         */
         
         } else if ((strcmp(UserInputCommand, "c")) == 0) {
-            startTimer();
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
             } else if (ProgramStarted == true) {

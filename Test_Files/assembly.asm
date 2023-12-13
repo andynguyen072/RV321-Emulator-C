@@ -4,7 +4,7 @@ addi t6, t5, -10
 addi t7, t6, 3
 add t28, t5, t6
 sub t29, t6, t7
-ssl t5, t5, t5
+sll t5, t5, t5
 srl t31, t7, t29
 sra t30, t29, t28
 or t29, t7, t7

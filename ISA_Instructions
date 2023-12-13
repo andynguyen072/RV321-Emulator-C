@@ -66,38 +66,44 @@ void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
 /*
     Load Instructions
 */
-void LB(int rd, int offset, int *rs1){ // Load Byte
-    int MemAddress = rs1 + offset;
+void LB(int rd, int offset, int rs1){ // Load Byte
+    int *rs1ad = &Registers[rs1];
+    int MemAddress = rs1ad + offset;
     int *pMemAddress = MemAddress;
     *pMemAddress = *pMemAddress >> 8;
-    Registers[rd] = *pMemAddress;
+    //Registers[rd] = *pMemAddress;
 }
 
-void LH(int rd, int offset, int *rs1){ // Load Halfword
-    int MemAddress = rs1 + offset;
+void LH(int rd, int offset, int rs1){ // Load Halfword
+    int *rs1ad = &Registers[rs1];
+    int MemAddress = rs1ad + offset;
     int *pMemAddress = MemAddress;
     *pMemAddress = *pMemAddress >> 4;
-    Registers[rd] = *pMemAddress;
+    //Registers[rd] = *pMemAddress;
 }
 
-void LW(int rd, int offset, int *rs1){ // Load Word
-    int MemAddress = rs1 + offset;
+void LW(int rd, int offset, int rs1){ // Load Word
+    int *rs1ad = &Registers[rs1];
+    int MemAddress = rs1ad + offset;
     int *pMemAddress = MemAddress;
-    Registers[rd] = *pMemAddress;
+    int* regPtr = Registers[rd];
+    //Registers[rd] = *pMemAddress;
 }
 
-void LBU(int rd, int offset, int *rs1){ // Load Byte Unsigned
-    int MemAddress = (unsigned)rs1 + offset;
+void LBU(int rd, int offset, int rs1){ // Load Byte Unsigned
+    int *rs1ad = &Registers[rs1];
+    int MemAddress = (unsigned)rs1ad + offset;
     int *pMemAddress = MemAddress;
     *pMemAddress = *pMemAddress >> 8;
-    Registers[rd] = *pMemAddress;
+    //Registers[rd] = *pMemAddress;
 }
 
-void LHU(int rd, int offset, int *rs1){ // Load Halfword Unsigned
-    int MemAddress = (unsigned)rs1 + offset;
+void LHU(int rd, int offset, int rs1){ // Load Halfword Unsigned
+    int *rs1ad = &Registers[rs1];
+    int MemAddress = (unsigned)rs1ad + offset;
     int *pMemAddress = MemAddress;
     *pMemAddress = *pMemAddress >> 4;
-    Registers[rd] = *pMemAddress;
+    //Registers[rd] = *pMemAddress;
 }
 /*
     Store Instructions
@@ -119,6 +125,7 @@ void SW(int rs2, int offset, int rs1){ // Store Word
     int *pMemAddress = MemAddress;
     *pMemAddress = rs2;
 }
+
 
 /*
     Immediate Instructions
