@@ -312,12 +312,12 @@ int main(){
             } else if ((fgets(currentLine, 50, datFileRead)) != NULL) {
                 printf("%s", currentLine);
             } else {
-                stopTimer();
                 ProgramFinished = true;
                 fclose(datFileRead);
                 printf("No more lines to read please restart terminal to run this command.\n");
             }
-        
+            stopTimer();
+
         /*
             'x0' to 'x31' - return the contents of the register from the register file (x0 must always stay 0).
         */
@@ -374,11 +374,10 @@ int main(){
                     printf("%s", currentLine);
                 }
 
-                stopTimer();
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
-        
+            stopTImer();
         /*
             exit - exits the terminal.
         */
