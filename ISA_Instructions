@@ -34,22 +34,26 @@ void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
 
 void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
     if (Registers[rs1] < Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
     if (Registers[rs1] >= Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
-    
+    if ((unsigned int)Registers[rs1] < (unsigned int)Registers[rs2]) {
+        ProgramCounter += offset;
+    }
 }
 
 void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
-    
+     if ((unsigned int)Registers[rs1] >= (unsigned int)Registers[rs2]) {
+        ProgramCounter += offset;
+    }
 }
 
 /*

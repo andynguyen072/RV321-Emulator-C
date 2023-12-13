@@ -125,6 +125,13 @@ int main(){
         return 0;
     }
 
+        // Open asm in writing mode
+    FILE* asmFileWrite;
+    char FileName2[100] = "Test_Files/assembly.asm";
+    asmFileWrite = fopen(FileName2, "w");
+
+
+
     /*
         File Loading / Parsing
     */
@@ -604,6 +611,7 @@ int main(){
                 }
                 ProgramFinished = true; 
                 fclose(datFileRead);
+                fclose(asmFileWrite);
             }
             stopTimer();
         /*
@@ -619,6 +627,7 @@ int main(){
             } else {
                 ProgramFinished = true;
                 fclose(datFileRead);
+                fclose(asmFileWrite);
                 printf("No more lines to read please restart terminal to run this command.\n");
             }
             stopTimer();
@@ -681,6 +690,7 @@ int main(){
 
                 ProgramFinished = true;
                 fclose(datFileRead);
+                fclose(asmFileWrite);
             }
             stopTimer();
         /*
