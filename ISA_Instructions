@@ -110,9 +110,6 @@ void ANDI(int rd, int rs1, int imm){ // AND Immediate
     
 }
 
-/*
-    Register Instructions
-*/
 void SLLI(int rd, int rs1, int shamt){ // Shift Left Logical Immediate
     
 }
@@ -125,41 +122,46 @@ void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
     
 }
 
+/*
+    Register Instructions
+*/
+
 void ADD(int rd, int rs1, int rs2){ // Add
-    
+    Registers[rd] = Registers[rs1] + Registers[rs2];
 }
 
 void SUB(int rd, int rs1, int rs2){ // Subtract
-    
+    Registers[rd] = Registers[rs1] - Registers[rs2];
 }
 
 void SLL(int rd, int rs1, int rs2){ // Shift Left Logical
-    
+    Registers[rd] = (unsigned)Registers[rs1] << Registers[rs2];
 }
 
 void SLT(int rd, int rs1, int rs2){ // Set Less Than
-    
+    Registers[rd] = (Registers[rs1] < Registers[rs2]) ? 1 : 0;
 }
 
 void SLTU(int rd, int rs1, int rs2){ // Set Less Than Unsigned
-    
+    Registers[rd] = ((unsigned)Registers[rs1] < (unsigned)Registers[rs2]) ? 1 : 0; // unsigned is the same as unsigned int
 }
 
 void XOR(int rd, int rs1, int rs2){ // XOR
-    
+    Registers[rd] = Registers[rs1] ^ Registers[rs2];
 }
 
 void SRL(int rd, int rs1, int rs2){ // Shift Right Logical
-    
+    Registers[rd] = (unsigned)Registers[rs1] >> Registers[rs2];
 }
 
 void SRA(int rd, int rs1, int rs2){ // Shift Right Arithmetic
+    Registers[rd] = Registers[rs1] >> Registers[rs2];
 }
 
 void OR(int rd, int rs1, int rs2){ // OR
-    
+    Registers[rd] = Registers[rs1] | Registers[rs2];
 }
 
 void AND(int rd, int rs1, int rs2){ // AND
-    
+    Registers[rd] = Registers[rs1] & Registers[rs2];
 }
