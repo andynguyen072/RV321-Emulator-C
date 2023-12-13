@@ -28,15 +28,21 @@ void BEQ(int rs1, int rs2, int offset){ // Branch if Equal
 }
 
 void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
-    
+    if (Registers[rs1] != Registers[rs2]) {
+        ProgramCounter += offset; 
+    }
 }
 
 void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
-    
+    if (Registers[rs1] < Registers[rs2]){
+        ProgramCounter +- offset;
+    }
 }
 
 void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
-    
+    if (Registers[rs1] >= Registers[rs2]){
+        ProgramCounter +- offset;
+    }
 }
 
 void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
@@ -127,7 +133,6 @@ void SRLI(int rd, int rs1, int shamt){ // Shift Right Logical Immediate
 void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
     Registers[rd] = Registers[rs1] >> shamt;
 }
-
 /*
     Register Instructions
 */
