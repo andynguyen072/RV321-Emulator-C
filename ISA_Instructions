@@ -134,7 +134,7 @@ void SUB(int rd, int rs1, int rs2){ // Subtract
     Registers[rd] = Registers[rs1] - Registers[rs2];
 }
 
-void fSLL(int rd, int rs1, int rs2){ // Shift Left Logical
+void SLL(int rd, int rs1, int rs2){ // Shift Left Logical
     Registers[rd] = (unsigned)Registers[rs1] << Registers[rs2];
 }
 
