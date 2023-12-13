@@ -296,11 +296,10 @@ int main(){
                 while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
                     printf("%s", currentLine);
                 }
-
-                stopTimer();
                 ProgramFinished = true; 
                 fclose(datFileRead);
             }
+            stopTimer();
         /*
            s - runs the next instruction and then stops and waits for next command
         */
