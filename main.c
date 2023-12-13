@@ -102,6 +102,14 @@ int twosBinaryConv(char bin[])
     }
 }
 
+void printRegisters()
+{
+    for(int i=0; i < 32; i++)
+    {
+        printf("x%d: %d\n", i,Registers[i]);
+    }
+}
+
 /*
     Main
 */
@@ -1368,6 +1376,7 @@ int main(){
                     printf("%s", currentLine);
                 }
 
+                printRegisters();
                 ProgramFinished = true;
                 fclose(datFileRead);
                 fclose(asmFileWrite);
