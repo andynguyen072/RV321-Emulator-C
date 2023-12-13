@@ -126,7 +126,7 @@ int main(){
 
         // Open file in reading mode
     FILE* datFileRead;
-    char FileName[100] = "Test_Files/r_type.dat";
+    char FileName[100] = "Test_Files/line.dat";
 
     datFileRead = fopen(FileName, "r");
         // fgetc    return each character in a sequence
@@ -148,11 +148,14 @@ int main(){
     /*
         File Loading / Parsing
     */
-    //void (*instr_func_array[100])() = {};
-    //int function_array_pointer = 0;
     char currentLine[8] = "";
     int asmPC = 0;
     char asmPrint[50][50];
+
+    //function array
+    //void (*instr_func_array[100])() = {};
+    //int (*parameters[100])[3]={};
+    //int ProgramPointer = 0;
 
     while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
         //  GET FULL LINE
@@ -207,7 +210,12 @@ int main(){
             strncat(statement, ImmChar, 20);
             strcpy(asmPrint[asmPC], statement);
             asmPC += 1;
+            //instr_func_array[ProgramPointer] = LUI;
+            //int param[3] = {ird, imm, NULL};
+            //parameters[ProgramPointer] = param;
+            //ProgramPointer += 1;
             LUI(ird,imm);
+            
             
         } else if(strcmp(opcode, "0010111") == 0)
         {
@@ -1277,7 +1285,8 @@ int main(){
                 printf("Program is in the middle of execution, please restart terminal to run this command.\n");
             } else {
                 ProgramStarted = true;
-                while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
+                while((fgets(currentLine, 50, datFileRead)) != NULL)
+                {
                     printf("%s", currentLine);
                 }
                 ProgramFinished = true; 
