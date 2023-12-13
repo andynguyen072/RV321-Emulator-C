@@ -13,7 +13,7 @@ void AUIPC(int rd, int imm){ // Add Upper Immediate to PC
 }
 
 void JAL(int rd, int offset){ // Jump and Link
-    
+
 }
 
 void JALR(int rd, int rs1, int offset){ // Jump and Link Register
@@ -24,7 +24,9 @@ void JALR(int rd, int rs1, int offset){ // Jump and Link Register
     Branch Instructions
 */
 void BEQ(int rs1, int rs2, int offset){ // Branch if Equal
-    
+    if (Registers[rs1] == Registers[rs2]) {
+        ProgramCounter += offset; 
+    }
 }
 
 void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
@@ -35,22 +37,26 @@ void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
 
 void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
     if (Registers[rs1] < Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
     if (Registers[rs1] >= Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
-    
+    if ((unsigned)Registers[rs1] < (unsigned)Registers[rs2]){
+        ProgramCounter += offset;
+    }
 }
 
 void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
-    
+    if ((unsigned)Registers[rs1] > (unsigned)Registers[rs2]){
+        ProgramCounter += offset;
+    }
 }
 
 /*
@@ -61,20 +67,20 @@ void LB(int rd, int offset, int rs1){ // Load Byte
     //Registers[rd] = rs1[offset];
 }
 
-void LH(int rd, int offset, int rs1[]){ // Load Halfword
-    Registers[rd] = rs1[offset];
+void LH(int rd, int offset, int rs1){ // Load Halfword
+    //Registers[rd] = rs1[offset];
 }
 
-void LW(int rd, int offset, int rs1[]){ // Load Word
-    Registers[rd] = rs1[offset];
+void LW(int rd, int offset, int rs1){ // Load Word
+    //Registers[rd] = rs1[offset];
 }
 
-void LBU(int rd, int offset, int rs1[]){ // Load Byte Unsigned
-    Registers[rd] = rs1[offset];
+void LBU(int rd, int offset, int rs1){ // Load Byte Unsigned
+    //Registers[rd] = rs1[offset];
 }
 
-void LHU(int rd, int offset, int rs1[]){ // Load Halfword Unsigned
-    Registers[rd] = rs1[offset];
+void LHU(int rd, int offset, int rs1){ // Load Halfword Unsigned
+    //Registers[rd] = rs1[offset];
 }
 /*
     Store Instructions
@@ -133,6 +139,7 @@ void SRLI(int rd, int rs1, int shamt){ // Shift Right Logical Immediate
 void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
     Registers[rd] = Registers[rs1] >> shamt;
 }
+
 /*
     Register Instructions
 */
