@@ -27,15 +27,25 @@ void BEQ(int rs1, int rs2, int offset){ // Branch if Equal
 }
 
 void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
-    
+    if (rs1 < 0 || rs1 >= 31 || rs2 < 0 || rs2 >= 31) {
+        return;
+    }
+
+    if (Registers[rs1] != Registers[rs2]) {
+        ProgramCounter += offset; 
+    }
 }
 
 void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
-    
+    if (Registers[rs1] < Registers[rs2]){
+        ProgramCounter +- offset;
+    }
 }
 
 void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
-    
+    if (Registers[rs1] >= Registers[rs2]){
+        ProgramCounter +- offset;
+    }
 }
 
 void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
@@ -111,17 +121,28 @@ void ANDI(int rd, int rs1, int imm){ // AND Immediate
 }
 
 void SLLI(int rd, int rs1, int shamt){ // Shift Left Logical Immediate
-    
+  if (rd < 0 || rd >= 31 || rs1 < 0 || rs1 >= 31) {
+        return;
+    }
+
+    Registers[rd] = Registers[rs1] << shamt;
 }
 
 void SRLI(int rd, int rs1, int shamt){ // Shift Right Logical Immediate
-    
+      if (rd < 0 || rd >= 31 || rs1 < 0 || rs1 >= 31) {
+        return;
+    }
+
+    Registers[rd] = Registers[rs1] >> shamt; 
 }
 
 void SRAI(int rd, int rs1, int shamt){ // Shift Right Arithmetic Immediate
-    
-}
+    if (rd < 0 || rd >= 31 || rs1 < 0 || rs1 >= 31) {
+        return;
+    }
 
+    Registers[rd] = Registers[rs1] >> shamt; 
+}
 /*
     Register Instructions
 */
