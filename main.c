@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h> 
+#include <math.h>
 #include "ISA_Instructions"
 #include "Global_Variables.h"
 #include "string.h"
@@ -19,6 +20,62 @@ int compareChar(char a, char b) {
         return -1;
 }
 
+int binaryConv(char bin[])
+{
+    bool negative = false;
+    char twos[32] = "";
+    strcpy(twos, bin);
+    if(bin[0] == '1')
+    {
+        //ones
+        for(int i = 0; i < strlen(bin); i++)
+        {
+            negative = true;
+            if(twos[i] == '0')
+            {
+                twos[i] = '1';
+            } else if(twos[i] == '1')
+            {
+                twos[i] = '0';
+            }
+        }
+        //twos
+        int c = 1;
+        for(int i = strlen(bin) - 1; i >= 0; i--)
+        {
+            if(twos[i] == '1' && c == 1)
+            {
+                twos[i] = '0';
+            } else if(twos[i] == '0' && c == 1)
+            {
+                twos[i] = '1';
+                c = 0;
+            }
+        }
+        // overload
+        if(c == 1){return 0;}
+    }
+
+    //BIN TO INT
+    int n = 0;
+    for(int i = 0; i < strlen(twos); i++)
+    {
+        if(twos[i] == '1')
+        {
+            n += pow(2,(strlen(twos)-i-1));
+        }
+    }
+
+    //CHECK IF NEGATIVE
+    if(negative)
+    {
+        return -1 * n;
+    } else
+    {
+        return n;
+    }
+}
+
 /*
     Main
 */
@@ -32,7 +89,8 @@ int main(){
     printf("%d ", Registers[1]);
     printf("%d ", Registers[4]);
     char myString[] = "joe";
-    printf("%c", myString[2]);
+    printf("%c ", myString[2]);
+    printf("%d ", binaryConv("10010001001010110111"));
 
     /*
         Reading File + Initializing
@@ -57,7 +115,8 @@ int main(){
     /*
         File Loading / Parsing
     */
-    void (*instr_func_array[])() = {};
+    void (*instr_func_array[100])() = {};
+    int function_array_pointer = 0;
     char currentLine[8] = "";
 
     while ((fgets(currentLine, 50, datFileRead)) != NULL) { // While there is a string to read, print the output
@@ -97,23 +156,43 @@ int main(){
         */
         if(strcmp(opcode, "0110111") == 0)
         {
-            // LUI
+            // LUI(GI)
+            char immC[21] = "";
+            for(int i = 0; i < 20; i++){immC[i] = fullLine[i];}
+            int imm = binaryConv(immC);
+            int ird = binaryConv(rd);
+            LUI(ird,imm);
             
         } else if(strcmp(opcode, "0010111") == 0)
         {
             // AUIPC
+            char immC[21] = "";
+            for(int i = 0; i < 20; i++){immC[i] = fullLine[i];}
+            int imm = binaryConv(immC);
+            int ird = binaryConv(rd);
+            AUIPC(ird,imm);
 
         } else if(strcmp(opcode, "1101111") == 0)
         {
             // JAL
+            // FIX LATER
 
         } else if(strcmp(opcode, "1100111") == 0)
         {
             // JALR
+            char rs1C[6] = "";
+            for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+            char immC[12] = "";
+            for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+            int imm = binaryConv(immC);
+            int rs1 = binaryConv(rs1C);
+            int ird = binaryConv(rd);
+            JALR(ird,rs1,imm);
 
         } else if(strcmp(opcode, "1100011") == 0)
         {
             // Branch Functions
+            // FIX LATER
             if(strcmp(func, "000") == 0)
             {
                 //BEQ
@@ -139,18 +218,59 @@ int main(){
             if(strcmp(func, "000") == 0)
             {
                 //LB
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                LB(ird,imm,rs1);
+
             } else if(strcmp(func, "001") == 0)
             {
                 //LH
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                LH(ird,imm,rs1);
             } else if(strcmp(func, "010") == 0)
             {
                 //LW
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                LW(ird,imm,rs1);
             } else if(strcmp(func, "100") == 0)
             {
                 //LBU
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                LBU(ird,imm,rs1);
             } else if(strcmp(func, "101") == 0)
             {
                 //LHU
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                LHU(ird,imm,rs1);
             }
         } else if(strcmp(opcode, "0100011") == 0)
         {
@@ -158,12 +278,45 @@ int main(){
             if(strcmp(func, "000") == 0)
             {
                 //SB
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                char immC[11] = "";
+                for(int i = 0; i < 6; i++){immC[i] = fullLine[i];}
+                for(int i = 0; i < 5; i++){immC[i+6] = fullLine[20+i];}
+                int imm = binaryConv(immC);
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                SB(rs2,imm,rs1);
             } else if(strcmp(func, "001") == 0)
             {
                 //SH
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                char immC[11] = "";
+                for(int i = 0; i < 6; i++){immC[i] = fullLine[i];}
+                for(int i = 0; i < 5; i++){immC[i+6] = fullLine[20+i];}
+                int imm = binaryConv(immC);
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                SH(rs2,imm,rs1);
             } else if(strcmp(func, "010") == 0)
             {
                 //SW
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                char immC[11] = "";
+                for(int i = 0; i < 6; i++){immC[i] = fullLine[i];}
+                for(int i = 0; i < 5; i++){immC[i+6] = fullLine[20+i];}
+                int imm = binaryConv(immC);
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                SW(rs2,imm,rs1);
             }
         } else if(strcmp(opcode, "0010011") == 0)
         {
@@ -171,32 +324,104 @@ int main(){
             if(strcmp(func, "000") == 0)
             {
                 //ADDI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                ADDI(ird,rs1,imm);
             } else if(strcmp(func, "010") == 0)
             {
                 //SLTI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                SLTI(ird,rs1,imm);
             } else if(strcmp(func, "011") == 0)
             {
                 //SLTIU
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                SLTIU(ird,rs1,imm);
             } else if(strcmp(func, "100") == 0)
             {
                 //XORI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                XORI(ird,rs1,imm);
             } else if(strcmp(func, "110") == 0)
             {
                 //ORI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                ORI(ird,rs1,imm);
             } else if(strcmp(func, "111") == 0)
             {
                 //ANDI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char immC[12] = "";
+                for(int i = 0; i < 11; i++){immC[i] = fullLine[i];}
+                int imm = binaryConv(immC);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                ANDI(ird,rs1,imm);
             } else if(strcmp(func, "001") == 0)
             {
                 //SLLI
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                SLLI(ird,rs1,rs2);
             } else if(strcmp(func, "101") == 0)
             {
                 if(fullLine[1] == '0')
                 {
                     //SRLI
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    SRLI(ird,rs1,rs2);
                 } else
                 {
                     //SRAI
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    SRAI(ird,rs1,rs2);
                 }
             } 
         } else if(strcmp(opcode, "0110011") == 0)
@@ -207,37 +432,117 @@ int main(){
                 if(fullLine[1] == '0')
                 {
                     //ADD
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    ADD(ird,rs1,rs2);
                 } else
                 {
                     //SUB
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    SUB(ird,rs1,rs2);
                 }
             } else if(strcmp(func, "001") == 0)
             {
                 // SSL
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                fSSL(ird,rs1,rs2);
             } else if(strcmp(func, "010") == 0)
             {
                 // SLT
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                SLT(ird,rs1,rs2);
             } else if(strcmp(func, "011") == 0)
             {
                 // SLTU
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                SLTU(ird,rs1,rs2);
             } else if(strcmp(func, "100") == 0)
             {
                 // XOR
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                XOR(ird,rs1,rs2);
             } else if(strcmp(func, "101") == 0)
             {
                 if(fullLine[1] == '0')
                 {
                     //SRL
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    SRL(ird,rs1,rs2);
                 } else
                 {
                     //SRA
+                    char rs1C[6] = "";
+                    for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                    char rs2C[6] = "";
+                    for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                    int rs2 = binaryConv(rs2C);
+                    int rs1 = binaryConv(rs1C);
+                    int ird = binaryConv(rd);
+                    SRA(ird,rs1,rs2);
                 }
             } else if(strcmp(func, "110") == 0)
             {
                 // OR
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                OR(ird,rs1,rs2);
             } else if(strcmp(func, "111") == 0)
             {
                 // AND
+                char rs1C[6] = "";
+                for(int i = 0; i < 5; i++){rs1C[i] = fullLine[12+i];}
+                char rs2C[6] = "";
+                for(int i = 0; i < 5; i++){rs2C[i] = fullLine[7+i];}
+                int rs2 = binaryConv(rs2C);
+                int rs1 = binaryConv(rs1C);
+                int ird = binaryConv(rd);
+                AND(ird,rs1,rs2);
             } 
         } 
     }
