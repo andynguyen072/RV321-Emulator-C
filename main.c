@@ -377,7 +377,7 @@ int main(){
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
-            stopTImer();
+            stopTimer();
         /*
             exit - exits the terminal.
         */
