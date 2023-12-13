@@ -3,6 +3,7 @@
 /*
     Misc Instructions
 */
+
 void LUI(int rd, int imm) { // Load Upper Immediate
     Registers[rd] = imm << 12;
     ProgramCounter += 4; 
@@ -27,7 +28,9 @@ void JALR(int rd, int rs1, int offset) { // Jump and Link Register
     Branch Instructions
 */
 void BEQ(int rs1, int rs2, int offset){ // Branch if Equal
-    
+    if (Registers[rs1] == Registers[rs2]){
+        ProgramCounter += offset;
+    }
 }
 
 void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
@@ -38,59 +41,83 @@ void BNE(int rs1, int rs2, int offset){ // Branch if Not Equal
 
 void BLT(int rs1, int rs2, int offset){ // Branch if Less Than
     if (Registers[rs1] < Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BGE(int rs1, int rs2, int offset){ // Branch if Greater Than or Equal
     if (Registers[rs1] >= Registers[rs2]){
-        ProgramCounter +- offset;
+        ProgramCounter += offset;
     }
 }
 
 void BLTU(int rs1, int rs2, int offset){ // Branch if Less Than Unsigned
-    
+    if ((unsigned)Registers[rs1] < (unsigned)Registers[rs2]){
+        ProgramCounter += offset;
+    }
 }
 
 void BGEU(int rs1, int rs2, int offset){ // Branch if Greater Than Unsigned
-    
+    if ((unsigned)Registers[rs1] > (unsigned)Registers[rs2]){
+        ProgramCounter += offset;
+    }
 }
 
 /*
     Load Instructions
 */
-void LB(int rd, int offset, int rs1){ // Load Byte
-    
+void LB(int rd, int offset, int *rs1){ // Load Byte
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = *pMemAddress >> 8;
+    Registers[rd] = *pMemAddress;
 }
 
-void LH(int rd, int offset, int rs1){ // Load Halfword
-    
+void LH(int rd, int offset, int *rs1){ // Load Halfword
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = *pMemAddress >> 4;
+    Registers[rd] = *pMemAddress;
 }
 
-void LW(int rd, int offset, int rs1){ // Load Word
-    
+void LW(int rd, int offset, int *rs1){ // Load Word
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    Registers[rd] = *pMemAddress;
 }
 
-void LBU(int rd, int offset, int rs1){ // Load Byte Unsigned
-    
+void LBU(int rd, int offset, int *rs1){ // Load Byte Unsigned
+    int MemAddress = (unsigned)rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = *pMemAddress >> 8;
+    Registers[rd] = *pMemAddress;
 }
 
-void LHU(int rd, int offset, int rs1){ // Load Halfword Unsigned
-    
+void LHU(int rd, int offset, int *rs1){ // Load Halfword Unsigned
+    int MemAddress = (unsigned)rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = *pMemAddress >> 4;
+    Registers[rd] = *pMemAddress;
 }
 /*
     Store Instructions
 */
 void SB(int rs2, int offset, int rs1){ // Store Byte
-
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = rs2 >> 8;
 }
 
 void SH(int rs2, int offset, int rs1){ // Store Halfword
-    
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = rs2 >> 4;
 }
 
 void SW(int rs2, int offset, int rs1){ // Store Word
-    
+    int MemAddress = rs1 + offset;
+    int *pMemAddress = MemAddress;
+    *pMemAddress = rs2;
 }
 
 /*
