@@ -3,20 +3,25 @@
 /*
     Misc Instructions
 */
-void LUI(int rd, int imm){ // Load Upper Immediate
-    Registers[rd] = imm;
+
+void LUI(int rd, int imm) { // Load Upper Immediate
+    Registers[rd] = imm << 12;
+    ProgramCounter += 4; 
 }
 
-void AUIPC(int rd, int imm){ // Add Upper Immediate to PC
-    
+void AUIPC(int rd, int imm) { // Add Upper Immediate to PC  
+    Registers[rd] = ProgramCounter + (imm << 12);
+    ProgramCounter += 4; 
 }
 
-void JAL(int rd, int offset){ // Jump and Link
-    
+void JAL(int rd, int offset) { // Jump and Link
+    Registers[rd] = ProgramCounter + 4;
+    ProgramCounter += offset; 
 }
 
-void JALR(int rd, int rs1, int offset){ // Jump and Link Register
-    
+void JALR(int rd, int rs1, int offset) { // Jump and Link Register
+    Registers[rd] = ProgramCounter + 4;
+    ProgramCounter = Registers[rs1] + offset; 
 }
 
 /*
