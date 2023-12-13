@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h> 
+#include <time.h>
 #include "ISA_Instructions"
 #include "Global_Variables.h"
 #include "string.h"
@@ -260,6 +261,17 @@ int main(){
     bool ProgramStarted = false;
     bool ProgramFinished = false;
     bool TerminalRun = true;
+    clock_t start, end; 
+    
+    void startTimer() {
+        start = clock();
+    }
+
+    void stopTimer() {
+        end = clock();
+        double ElapsedTime = ((double)(end - start)) / CLOCKS_PER_SEC;
+        printf("Execution Time: %f seconds\n", ElapsedTime);
+    }
 
     /*
         Terminal Backend
@@ -274,6 +286,7 @@ int main(){
         */
             // strcmp returns -1 if not equal, 0 if equal
         if ((strcmp(UserInputCommand, "r")) == 0) {
+            startTimer();
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
             } else if (ProgramStarted == true) {
@@ -284,7 +297,8 @@ int main(){
                     printf("%s", currentLine);
                 }
 
-                ProgramFinished = true;
+                stopTimer();
+                ProgramFinished = true; 
                 fclose(datFileRead);
             }
         /*
@@ -292,11 +306,13 @@ int main(){
         */
         
         } else if ((strcmp(UserInputCommand, "s")) == 0) {
+            startTimer();
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
             } else if ((fgets(currentLine, 50, datFileRead)) != NULL) {
                 printf("%s", currentLine);
             } else {
+                stopTimer();
                 ProgramFinished = true;
                 fclose(datFileRead);
                 printf("No more lines to read please restart terminal to run this command.\n");
@@ -347,6 +363,7 @@ int main(){
         */
         
         } else if ((strcmp(UserInputCommand, "c")) == 0) {
+            startTimer();
             if (ProgramFinished == true) {
                 printf("Program has already been ran, please restart terminal to run this command.\n");
             } else if (ProgramStarted == true) {
@@ -357,6 +374,7 @@ int main(){
                     printf("%s", currentLine);
                 }
 
+                stopTimer();
                 ProgramFinished = true;
                 fclose(datFileRead);
             }
